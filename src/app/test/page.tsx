@@ -3,12 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import MessagesProvider from '../NextIntlClientProvider';
-import { useCookies } from 'next-client-cookies';
 
-function TestPage() {
+export default function TestPage() {
   const router = useRouter();
-  const t = useTranslations('test.title');
+  const t = useTranslations('test');
 
   const goToHome = () => {
     router.push('/');
@@ -32,16 +30,5 @@ function TestPage() {
         </div>
       </div>
     </main>
-  );
-}
-
-export default function TestPageWithMessages() {
-  const cookies = useCookies();
-  const locale = cookies.get('NEXT_LOCALE');
-
-  return (
-    <MessagesProvider locale={locale}>
-      <TestPage />
-    </MessagesProvider>
   );
 }

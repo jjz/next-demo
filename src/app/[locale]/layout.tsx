@@ -1,10 +1,8 @@
 'use client';
 
-import { NextIntlClientProvider } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { useEffect, useState } from 'react';
-import { getRequestConfig } from 'next-intl/server';
+import { useEffect } from 'react';
 
 export default function LocaleLayout({ 
   children
@@ -15,23 +13,12 @@ export default function LocaleLayout({
   const paramLocale = params.locale as string;
   const cookies = useCookies();
   
-  // Get the user's preferred language from cookie or use the param locale or browser language
-  const locale = cookies.get('NEXT_LOCALE') || paramLocale || 'en';
-  
-  // Save the current locale to cookie
+  // 将URL参数中的locale同步到cookie
   useEffect(() => {
-    cookies.set('NEXT_LOCALE', locale);
-  }, [locale, cookies]);
+    if (paramLocale) {
+      cookies.set('NEXT_LOCALE', paramLocale);
+    }
+  }, [paramLocale, cookies]);
 
-  return (
-    <NextIntlClientProvider
-      locale={locale}
-      timeZone="UTC"
-      onError={(error) => {
-        console.error('NextIntl error:', error);
-      }}
-    >
-      {children}
-    </NextIntlClientProvider>
-  );
+  return <>{children}</>;
 }

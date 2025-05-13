@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation';
 import { getRequestConfig } from 'next-intl/server';
+import getConfig from 'next/config';
 
-// Load configuration from @messages/config.json
-import config from '@messages/config.json';
+// 从next.config.js获取配置
+const { publicRuntimeConfig } = getConfig();
+const config = publicRuntimeConfig.i18n;
+
 export const locales = config.supportedLocales as readonly string[];
 export type Locale = (typeof locales)[number];
 

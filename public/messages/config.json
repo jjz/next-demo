@@ -1,6 +1,0 @@
-{
-  "defaultLocale": "en",
-  "supportedLocales": ["zh", "en"],
-  "localePrefix": "never",
-  "localeDetection": true
-} 
