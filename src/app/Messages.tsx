@@ -5,6 +5,20 @@ import { useCookies } from 'next-client-cookies';
 import { NextIntlClientProvider } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+// 预先导入翻译文件，避免动态导入路径问题
+import enMessages from '@/messages/en.json';
+import zhMessages from '@/messages/zh.json';
+
+// 定义消息映射的类型
+type MessagesMap = {
+  [key: string]: typeof enMessages;
+};
+
+const messagesMap: MessagesMap = {
+  'en': enMessages,
+  'zh': zhMessages
+};
+
 interface MessagesProviderProps {
   children: ReactNode;
   locale?: string;
@@ -20,29 +34,20 @@ export default function MessagesProvider({
   // Get locale from props, cookie, or use 'en' as default
   const locale = propLocale || cookies.get('NEXT_LOCALE') || 'en';
   
-  // Load messages based on locale
+  // 使用预先导入的翻译文件
   useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        // Try to load messages for the current locale
-        const messages = (await import(`@/messages/${locale}.json`)).default;
-        setMessages(messages);
-        
-        // Save the current locale to cookie for persistence
-        cookies.set('NEXT_LOCALE', locale);
-      } catch (error) {
-        console.error(`Failed to load messages for locale: ${locale}`, error);
-        // Fallback to English if loading fails
-        try {
-          const fallbackMessages = (await import(`@/messages/en.json`)).default;
-          setMessages(fallbackMessages);
-        } catch (e) {
-          console.error('Failed to load fallback messages', e);
-        }
-      }
-    };
-    
-    loadMessages();
+    try {
+      // 从预先导入的映射中获取翻译
+      const localeMessages = messagesMap[locale] || messagesMap['en'];
+      setMessages(localeMessages);
+      
+      // Save the current locale to cookie for persistence
+      cookies.set('NEXT_LOCALE', locale);
+    } catch (error) {
+      console.error(`Failed to load messages for locale: ${locale}`, error);
+      // Fallback to English
+      setMessages(messagesMap['en']);
+    }
   }, [locale, cookies]);
 
   return (
