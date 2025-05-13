@@ -7,6 +7,14 @@ const nextConfig = {
   output: 'standalone',
   outputFileTracingIncludes: {
     '/**': ['./public/messages/**/*']
+  },
+  i18n: {
+    // ...other i18n configuration
+  },
+  experimental: {
+    nextIntl: {
+      timeZone: 'UTC'
+    }
   }
 };
 

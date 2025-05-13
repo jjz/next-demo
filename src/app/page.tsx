@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import MessagesProvider from './Messages';
+import MessagesProvider from './NextIntlClientProvider';
 import { useCookies } from 'next-client-cookies';
 
 function HomePage() {

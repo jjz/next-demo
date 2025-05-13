@@ -11,42 +11,33 @@ export default getRequestConfig(async ({ locale }) => {
   if (!locales.includes(locale as Locale)) notFound();
 
   try {
-    // Use fetch API (compatible with Edge Runtime) to get translation files
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL || ''}/messages/${locale}.json`);
-    if (!response.ok) throw new Error(`Failed to load messages for ${locale}`);
-    
-    const messages = await response.json();
+
+    const messages = (await import(`@messages/${locale}.json`)).default;
     return {
       locale: locale as Locale,
-      messages
+      messages,
+      timeZone: 'UTC'
     };
   } catch (error) {
-    console.error(`Error loading messages for ${locale}:`, error);
-    
-    // Try direct import as fallback
+    console.error(`Failed to load messages for ${locale}, trying default locale`);
+
+
     try {
-      // Using @messages path alias
+      const defaultLocale = config.defaultLocale;
+      const messages = (await import(`@messages/${defaultLocale}.json`)).default;
+
       return {
         locale: locale as Locale,
-        messages: (await import(`@messages/${locale}.json`)).default
+        messages,
+        timeZone: 'UTC'
       };
-    } catch (importError) {
-      console.error(`Error importing messages for ${locale}:`, importError);
-      
-      // Final fallback: use the default locale from config
-      try {
-        const defaultLocale = config.defaultLocale;
-        return {
-          locale: locale as Locale, 
-          messages: (await import(`@messages/${defaultLocale}.json`)).default
-        };
-      } catch (finalError) {
-        console.error('Failed to load any messages', finalError);
-        return {
-          locale: locale as Locale,
-          messages: {} // Empty object as last resort
-        };
-      }
+    } catch (fallbackError) {
+      console.error('Failed to load any messages');
+      return {
+        locale: locale as Locale,
+        messages: {},
+        timeZone: 'UTC'
+      };
     }
   }
 }); 
