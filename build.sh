@@ -3,8 +3,9 @@
 
 rm -rf .next
 
+yarn
 
-npm run build
+yarn run build
 
 
 cp -r public .next/standalone/
