@@ -2,20 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { useLocale } from 'next-intl';
-
+import { useTranslation } from 'react-i18next';
 
 const supportedLocales = ['en', 'zh'];
 
 export default function LanguageSwitcher() {
   const cookies = useCookies();
   const router = useRouter();
-  const currentLocale = useLocale();
+  const { i18n } = useTranslation();
   
   const handleLanguageChange = (locale: string) => {
-    // Store the selected language in cookie
+    // 更新 i18n 语言
+    i18n.changeLanguage(locale);
+    // 存储语言选择到 cookie
     cookies.set('NEXT_LOCALE', locale);
-    // Refresh the current page to apply the new language
+    // 刷新页面以应用新语言
     router.refresh();
   };
 
@@ -26,7 +27,7 @@ export default function LanguageSwitcher() {
           key={locale}
           onClick={() => handleLanguageChange(locale)}
           className={`px-3 py-1 rounded ${
-            currentLocale === locale 
+            i18n.language === locale 
               ? 'bg-blue-600 text-white' 
               : 'bg-gray-200 hover:bg-gray-300'
           }`}

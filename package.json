@@ -12,7 +12,6 @@
     "next": "15.3.2",
     "next-client-cookies": "^2.1.0",
     "next-i18next": "^15.4.2",
-    "next-intl": "^4.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
