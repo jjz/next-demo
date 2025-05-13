@@ -1,32 +1,20 @@
-const createNextIntlPlugin = require('next-intl/plugin');
-
-
-const i18nConfig = {
-  defaultLocale: "en",
-  supportedLocales: ["zh", "en"],
-  localePrefix: "never", 
-  localeDetection: true
-};
-
-
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
+const { i18n } = require('./next-i18next.config');
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  i18n,
   output: 'standalone',
   outputFileTracingIncludes: {
-    '/**': ['./public/messages/**/*']
+    '/**': ['./public/locales/**/*']
   },
-  // 移除空的i18n配置
-  experimental: {
-    nextIntl: {
-      timeZone: 'UTC'
-    }
-  },
-  // 将i18n配置暴露给客户端
-  publicRuntimeConfig: {
-    i18n: i18nConfig
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@messages': path.join(__dirname, 'public/locales')
+    };
+    return config;
   }
 };
 
-module.exports = withNextIntl(nextConfig); 
+module.exports = nextConfig;
