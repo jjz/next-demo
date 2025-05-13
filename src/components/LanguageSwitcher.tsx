@@ -2,12 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { locales } from '@/i18n';
+import { useLocale } from 'next-intl';
+
+
+const supportedLocales = ['en', 'zh'];
 
 export default function LanguageSwitcher() {
   const cookies = useCookies();
   const router = useRouter();
-  const currentLocale = cookies.get('NEXT_LOCALE') || 'en';
+  const currentLocale = useLocale();
   
   const handleLanguageChange = (locale: string) => {
     // Store the selected language in cookie
@@ -18,7 +21,7 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="flex gap-2 mt-4">
-      {locales.map((locale) => (
+      {supportedLocales.map((locale) => (
         <button
           key={locale}
           onClick={() => handleLanguageChange(locale)}
