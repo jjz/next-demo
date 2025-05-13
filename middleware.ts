@@ -1,15 +1,15 @@
 import createMiddleware from 'next-intl/middleware';
-import {locales} from './src/i18n';
+import i18nConfig from '@messages/config.json';
 
 export default createMiddleware({
-  // Supported locales
-  locales,
-  // Set default locale to English, but will be overridden by system detection
-  defaultLocale: 'en',
-  // Don't include locale in URL
-  localePrefix: 'never',
-  // Use cookie for language preference and enable system detection
-  localeDetection: true
+  // Supported locales from config
+  locales: i18nConfig.supportedLocales,
+  // Default locale from config
+  defaultLocale: i18nConfig.defaultLocale,
+  // Locale prefix setting from config
+  localePrefix: i18nConfig.localePrefix,
+  // Locale detection setting from config
+  localeDetection: i18nConfig.localeDetection
 });
 
 export const config = {

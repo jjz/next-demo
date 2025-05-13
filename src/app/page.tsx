@@ -8,7 +8,7 @@ import { useCookies } from 'next-client-cookies';
 
 function HomePage() {
   const router = useRouter();
-  const t = useTranslations('home');
+  const t = useTranslations('home.title');
 
   const goToTestPage = () => {
     router.push('/test');
