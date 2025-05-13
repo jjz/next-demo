@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
 import { useEffect, useState } from 'react';
+import { getRequestConfig } from 'next-intl/server';
 
 export default function LocaleLayout({ 
   children
@@ -13,33 +14,10 @@ export default function LocaleLayout({
   const params = useParams();
   const paramLocale = params.locale as string;
   const cookies = useCookies();
-  const [messages, setMessages] = useState({});
   
   // Get the user's preferred language from cookie or use the param locale or browser language
   const locale = cookies.get('NEXT_LOCALE') || paramLocale || 'en';
   
-  // Load messages based on locale
-  useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        // Try to load messages for the current locale
-        const messages = (await import(`@/messages/${locale}.json`)).default;
-        setMessages(messages);
-      } catch (error) {
-        console.error(`Failed to load messages for locale: ${locale}`, error);
-        // Fallback to English if loading fails
-        try {
-          const fallbackMessages = (await import(`@/messages/en.json`)).default;
-          setMessages(fallbackMessages);
-        } catch (e) {
-          console.error('Failed to load fallback messages', e);
-        }
-      }
-    };
-    
-    loadMessages();
-  }, [locale]);
-
   // Save the current locale to cookie
   useEffect(() => {
     cookies.set('NEXT_LOCALE', locale);
@@ -48,7 +26,7 @@ export default function LocaleLayout({
   return (
     <NextIntlClientProvider
       locale={locale}
-      messages={messages}
+      timeZone="UTC"
       onError={(error) => {
         console.error('NextIntl error:', error);
       }}
