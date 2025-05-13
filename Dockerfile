@@ -31,9 +31,5 @@ COPY --from=builder /app/public ./public
 # 暴露端口
 EXPOSE 3000
 
-# 设置环境变量
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
 # 运行应用
 CMD ["node", "server.js"] 
