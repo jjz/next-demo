@@ -7,9 +7,9 @@ WORKDIR /app
 ENV NODE_ENV production
 
 
-COPY  /app/.next/standalone ./
-COPY  /app/.next/static ./.next/static
-COPY  /app/public ./public
+COPY  .next/standalone ./
+COPY  .next/static ./.next/static
+COPY  public ./public
 
 
 EXPOSE 3000
