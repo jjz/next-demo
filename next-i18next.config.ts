@@ -18,6 +18,12 @@ const config: InitOptions = {
     zh: {
       common: require('../public/messages/zh.json')
     }
+  },
+  // 禁用 URL 中的语言参数
+  detection: {
+    order: ['cookie'],
+    lookupCookie: 'NEXT_LOCALE',
+    caches: ['cookie']
   }
 };
 

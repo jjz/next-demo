@@ -2,11 +2,6 @@ import type { NextConfig } from 'next';
 import path from 'path';
 
 const nextConfig: NextConfig = {
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'zh'],
-    // localeDetection: true
-  },
   output: 'standalone',
   outputFileTracingIncludes: {
     '/**': ['./public/messages/**/*']
