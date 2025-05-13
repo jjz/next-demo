@@ -2,7 +2,8 @@
   "home": {
     "title": "Welcome to Multilingual Next.js App",
     "description": "This is a Next.js project example with multilingual support",
-    "queryLink": "Go to Query Page"
+    "queryLink": "Go to Query Page",
+    "testButton": "Go to Test Page"
   },
   "query": {
     "title": "Query Page",
@@ -10,6 +11,11 @@
     "searchPlaceholder": "Enter search content",
     "searchButton": "Search",
     "homeLink": "Back to Home"
+  },
+  "test": {
+    "title": "Test Page",
+    "description": "This is a test page to demonstrate navigation and language persistence",
+    "homeButton": "Back to Home"
   },
   "language": {
     "switch": "Switch Language"

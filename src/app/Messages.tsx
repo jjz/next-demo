@@ -1,22 +1,24 @@
 'use client';
 
-import { NextIntlClientProvider } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { ReactNode } from 'react';
 import { useCookies } from 'next-client-cookies';
+import { NextIntlClientProvider } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-export default function LocaleLayout({ 
-  children
-}: { 
-  children: React.ReactNode
-}) {
-  const params = useParams();
-  const paramLocale = params.locale as string;
+interface MessagesProviderProps {
+  children: ReactNode;
+  locale?: string;
+}
+
+export default function MessagesProvider({ 
+  children,
+  locale: propLocale
+}: MessagesProviderProps) {
   const cookies = useCookies();
   const [messages, setMessages] = useState({});
   
-  // Get the user's preferred language from cookie or use the param locale or browser language
-  const locale = cookies.get('NEXT_LOCALE') || paramLocale || 'en';
+  // Get locale from props, cookie, or use 'en' as default
+  const locale = propLocale || cookies.get('NEXT_LOCALE') || 'en';
   
   // Load messages based on locale
   useEffect(() => {
@@ -25,6 +27,9 @@ export default function LocaleLayout({
         // Try to load messages for the current locale
         const messages = (await import(`@/messages/${locale}.json`)).default;
         setMessages(messages);
+        
+        // Save the current locale to cookie for persistence
+        cookies.set('NEXT_LOCALE', locale);
       } catch (error) {
         console.error(`Failed to load messages for locale: ${locale}`, error);
         // Fallback to English if loading fails
@@ -38,11 +43,6 @@ export default function LocaleLayout({
     };
     
     loadMessages();
-  }, [locale]);
-
-  // Save the current locale to cookie
-  useEffect(() => {
-    cookies.set('NEXT_LOCALE', locale);
   }, [locale, cookies]);
 
   return (
@@ -56,4 +56,4 @@ export default function LocaleLayout({
       {children}
     </NextIntlClientProvider>
   );
-}
+} 
